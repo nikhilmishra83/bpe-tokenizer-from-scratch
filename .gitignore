@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+env/
+
+# OS
+.DS_Store
+
+# debug
+repomix-output.md
+
+# Text / data files (local only)
+resource_files/
