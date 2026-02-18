@@ -22,6 +22,7 @@ class BPETrainer:
         for i in range(len(symbols) -1):
             pair = (symbols[i], symbols[i+1])
             pairs.append(pair)
+        # print(pairs)
         return pairs
         
     def count_pairs_in_vocab(self):
@@ -46,6 +47,7 @@ class BPETrainer:
             for pair in word_pairs:
                 pairs[pair] += word_freq    # NOT += 1 !
 
+        # print(f"pairs: {pairs}")
         return pairs
     
     def merge_pair_in_vocab(self, pair):
@@ -100,3 +102,49 @@ class BPETrainer:
         for seq, freq in self.vocab.items():
             print(f" '{seq}': {freq}")
             
+        # STEP 2 : Iterative merging
+        for iteration in range(num_merges):
+            print(f"\n Iteration {iteration + 1}/{num_merges}")
+            print("-" * 50)
+
+            # Count all pairs
+            pairs = self.count_pairs_in_vocab()
+            print(f"iteration {iteration} pairs: {pairs}")
+
+            # Check if we have any pairs left
+            if not pairs:
+                print("No more pairs to merge. Stopping early.")
+                break
+
+            # Find the most frequent pair
+            best_pair, best_count = pairs.most_common(1)[0]
+            print(f"Most frequent pair: {best_pair} (count: {best_count})")
+
+            print(f"after mege vocabulary:")
+            for seq, freq in self.vocab.items():
+                print(f" '{seq}': {freq}")
+
+            # Perform the merge
+            self.merge_pair_in_vocab(best_pair)
+            print(f"Merged '{best_pair[0]} {best_pair[1]}' -> '{best_pair[0] + best_pair[1]}'")
+
+            print(f"before mege vocabulary:")
+            for seq, freq in self.vocab.items():
+                print(f" '{seq}': {freq}")
+
+            # Save this merge rule
+            self.merge_rules.append(best_pair)
+
+            # Show updated vocabulary
+            print(f" Updated vocabulary:")
+            for seq, freq in self.vocab.items():
+                print(f" '{seq}' : {freq}")
+            
+        print("\n" + "=" * 50)
+        print("TRAINING COMPLETE!")
+        print("=" * 50)
+        print(f"\nLearned {len(self.merge_rules)} merge rules:")
+        for i, rule in enumerate(self.merge_rules):
+            print(f" {i+1}. {rule[0]} + {rule[1]} -> {rule[0] + rule[1]}")
+        
+        return self.merge_rules
