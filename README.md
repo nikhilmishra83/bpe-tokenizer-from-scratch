@@ -1,4 +1,4 @@
-# Byte Pair Encoding Tokenizer (Work in Progress)
+# Byte Pair Encoding Tokenizer 
 
 This repository documents the process of building a Byte Pair Encoding (BPE) tokenizer from scratch in Python.
 
